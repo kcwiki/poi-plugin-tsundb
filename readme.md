@@ -1,6 +1,6 @@
 # poi-plugin-tsundb
 
-[![npm/v](https://img.shields.io/npm/v/poi-plugin-tsundb.svg)](https://www.npmjs.org/package/poi-plugin-tsundb)
+[![npm/v](https://img.shields.io/npm/v/poi-plugin-tsundb.svg)](https://www.npmjs.com/package/poi-plugin-tsundb)
 [![npm/dm](https://img.shields.io/npm/dm/poi-plugin-tsundb.svg)](https://www.npmjs.com/package/poi-plugin-tsundb)
 [![travis](https://img.shields.io/travis/kcwiki/poi-plugin-tsundb.svg)](https://travis-ci.org/kcwiki/poi-plugin-tsundb)
 [![david/dev](https://img.shields.io/david/dev/kcwiki/poi-plugin-tsundb.svg)](https://david-dm.org/kcwiki/poi-plugin-tsundb?type=dev)
