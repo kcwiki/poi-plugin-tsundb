@@ -1,1 +1,6 @@
-{}
+{
+  "Plugin": {
+    "Title": "TsunDB Reporter",
+    "Description": "Report data to [TsunDB](https://tsundb.kc3.moe/)"
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "mapinfo": {
+    "api_map_info": [{ "api_id": 11, "api_cleared": 1, "api_exboss_flag": 0 }]
+  },
+
+  "start": {
+    "api_cell_data": [
+      { "api_id": 3001, "api_no": 0, "api_color_no": 0, "api_passed": 0 },
+      { "api_id": 3002, "api_no": 1, "api_color_no": 4, "api_passed": 1 },
+      { "api_id": 3003, "api_no": 2, "api_color_no": 4, "api_passed": 1 },
+      { "api_id": 3004, "api_no": 3, "api_color_no": 5, "api_passed": 1 }
+    ],
+    "api_rashin_flg": 0,
+    "api_rashin_id": 0,
+    "api_maparea_id": 1,
+    "api_mapinfo_no": 1,
+    "api_no": 1,
+    "api_color_no": 4,
+    "api_event_id": 4,
+    "api_event_kind": 1,
+    "api_next": 1,
+    "api_bosscell_no": 3,
+    "api_bosscomp": 1,
+    "api_airsearch": { "api_plane_type": 0, "api_result": 0 },
+    "api_from_no": 0
+  },
+
+  "battle": {
+    "api_deck_id": 1,
+    "api_formation": [1, 1, 2],
+    "api_f_nowhps": [42, 13],
+    "api_f_maxhps": [42, 13],
+    "api_fParam": [[60, 54, 110, 54], [6, 18, 7, 5]],
+    "api_ship_ke": [1502],
+    "api_ship_lv": [1],
+    "api_e_nowhps": [22],
+    "api_e_maxhps": [22],
+    "api_eSlot": [[502, -1, -1, -1, -1]],
+    "api_eParam": [[7, 16, 7, 6]],
+    "api_midnight_flag": 0,
+    "api_search": [5, 5],
+    "api_stage_flag": [1, 0, 0],
+    "api_kouku": {
+      "api_plane_from": [null, null],
+      "api_stage1": {
+        "api_f_count": 0,
+        "api_f_lostcount": 0,
+        "api_e_count": 0,
+        "api_e_lostcount": 0,
+        "api_disp_seiku": 1,
+        "api_touch_plane": [-1, -1]
+      },
+      "api_stage2": null,
+      "api_stage3": null
+    },
+    "api_support_flag": 0,
+    "api_support_info": null,
+    "api_opening_taisen_flag": 0,
+    "api_opening_taisen": null,
+    "api_opening_flag": 0,
+    "api_opening_atack": null,
+    "api_hourai_flag": [1, 0, 0, 0],
+    "api_hougeki1": {
+      "api_at_eflag": [0],
+      "api_at_list": [0],
+      "api_at_type": [0],
+      "api_df_list": [[0]],
+      "api_si_list": [[122]],
+      "api_cl_list": [[1]],
+      "api_damage": [[53]]
+    },
+    "api_hougeki2": null,
+    "api_hougeki3": null,
+    "api_raigeki": null
+  },
+
+  "next": {
+    "api_rashin_flg": 1,
+    "api_rashin_id": 4,
+    "api_maparea_id": 1,
+    "api_mapinfo_no": 1,
+    "api_no": 3,
+    "api_color_no": 5,
+    "api_event_id": 5,
+    "api_event_kind": 1,
+    "api_next": 0,
+    "api_bosscell_no": 3,
+    "api_bosscomp": 1,
+    "api_comment_kind": 0,
+    "api_production_kind": 0,
+    "api_airsearch": { "api_plane_type": 0, "api_result": 0 },
+    "api_ration_flag": 0
+  },
+
+  "battle2": {
+    "api_deck_id": 1,
+    "api_formation": [1, 1, 2],
+    "api_f_nowhps": [42, 13],
+    "api_f_maxhps": [42, 13],
+    "api_fParam": [[60, 54, 110, 54], [6, 18, 7, 5]],
+    "api_ship_ke": [1505, 1503, 1502, 1502],
+    "api_ship_lv": [1, 1, 1, 1],
+    "api_e_nowhps": [33, 24, 22, 22],
+    "api_e_maxhps": [33, 24, 22, 22],
+    "api_eSlot": [[504, 525, -1, -1, -1], [502, 513, -1, -1, -1], [502, -1, -1, -1, -1], [502, -1, -1, -1, -1]],
+    "api_eParam": [[14, 24, 10, 15], [6, 16, 6, 7], [7, 16, 7, 6], [7, 16, 7, 6]],
+    "api_midnight_flag": 1,
+    "api_search": [5, 1],
+    "api_stage_flag": [1, 0, 0],
+    "api_kouku": {
+      "api_plane_from": [null, null],
+      "api_stage1": {
+        "api_f_count": 0,
+        "api_f_lostcount": 0,
+        "api_e_count": 0,
+        "api_e_lostcount": 0,
+        "api_disp_seiku": 1,
+        "api_touch_plane": [-1, -1]
+      },
+      "api_stage2": null,
+      "api_stage3": null
+    },
+    "api_support_flag": 0,
+    "api_support_info": null,
+    "api_opening_taisen_flag": 0,
+    "api_opening_taisen": null,
+    "api_opening_flag": 0,
+    "api_opening_atack": null,
+    "api_hourai_flag": [1, 0, 0, 1],
+    "api_hougeki1": {
+      "api_at_eflag": [0, 1, 0, 1, 1],
+      "api_at_list": [1, 0, 0, 3, 1],
+      "api_at_type": [0, 0, 0, 0, 0],
+      "api_df_list": [[0], [1], [2], [1], [1]],
+      "api_si_list": [[1], [504], [122], [502], [502]],
+      "api_cl_list": [[0], [0], [1], [0], [0]],
+      "api_damage": [[0], [0], [56], [0.1], [0.1]]
+    },
+    "api_hougeki2": null,
+    "api_hougeki3": null,
+    "api_raigeki": {
+      "api_frai": [3, 3, -1, -1, -1, -1, -1],
+      "api_fcl": [1, 1, 0, 0, 0, 0, 0],
+      "api_fdam": [0, 8.1, 0, 0, 0, 0, 0],
+      "api_fydam": [39, 11, 0, 0, 0, 0, 0],
+      "api_erai": [1, 0, -1, 1, -1, -1, -1],
+      "api_ecl": [1, 0, 0, 0, 0, 0, 0],
+      "api_edam": [0, 0, 0, 50, 0, 0, 0],
+      "api_eydam": [8, 0, 0, 0, 0, 0, 0]
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import IHandler from '.'
-import { sendData } from '../utils'
+import { log, sendData } from '../utils'
 
 interface ISortieState {
   map: string
@@ -7,7 +7,7 @@ interface ISortieState {
   node: number
 }
 
-const sendEnemyComp = ({ map, diff: difficulty, node }: ISortieState, body: any, isAirRaidData: boolean = false) => {
+const sendEnemyComp = (map: string, node: number, difficulty: number, body: any, isAirRaid?: true) => {
   if (!map || !node) {
     return
   }
@@ -28,7 +28,7 @@ const sendEnemyComp = ({ map, diff: difficulty, node }: ISortieState, body: any,
       hpEscort: body.api_e_maxhps_combined,
       statsEscort: body.api_eParam_combined,
       equipEscort: body.api_eSlot_combined,
-      isAirRaid: isAirRaidData || undefined,
+      isAirRaid,
     },
   })
 }
@@ -46,25 +46,18 @@ export default class SortieHandler implements IHandler {
   }
   public handle(path: string, body: any, postBody: any) {
     switch (path) {
-      case 'api_port/port':
-        this.clearState()
-        break
       case 'api_get_member/mapinfo':
-        this.clearState()
-        for (const map of body.api_map_info) {
-          this.state.diffs[map.api_id] = (map.api_eventmap || {}).api_selected_rank || 0
-        }
+        this.initState(body)
         break
       case 'api_req_map/select_eventmap_rank':
-        this.state.diffs[parseInt(postBody.api_maparea_id, 10) * 10 + parseInt(postBody.api_map_no, 10)] = parseInt(postBody.api_rank, 10)
+        // update diffs state
+        this.state.diffs[Number(postBody.api_maparea_id) * 10 + Number(postBody.api_map_no)] = Number(postBody.api_rank)
         break
       case 'api_req_map/start':
-        this.setSortieState(body)
-        break
       case 'api_req_map/next':
-        this.setSortieState(body)
+        this.initSortieState(body)
         if (body.api_destruction_battle) {
-          sendEnemyComp(this.state, body.api_destruction_battle, true)
+          sendEnemyComp(this.state.map, this.state.node, this.state.diff, body.api_destruction_battle, true)
         }
         break
       case 'api_req_sortie/battle':
@@ -81,28 +74,36 @@ export default class SortieHandler implements IHandler {
       case 'api_req_combined_battle/each_battle_water':
       case 'api_req_combined_battle/sp_midnight':
       case 'api_req_combined_battle/ec_night_to_day':
-        sendEnemyComp(this.state, body)
+        sendEnemyComp(this.state.map, this.state.node, this.state.diff, body)
+        this.clearSortieState()
         break
-      case 'api_req_sortie/battleresult':
-      case 'api_req_combined_battle/battleresult':
-        break
+      // case 'api_req_sortie/battleresult':
+      // case 'api_req_combined_battle/battleresult':
+      // break
       default:
         return
     }
-    if (process.env.DEBUG) {
-      console.log(`poi-plugin-tsundb : SortieHandler : handle : ${path}`, body, postBody)
-      console.log(`poi-plugin-tsundb : SortieHandler : state :`, this.state)
-    }
+    log('SortieHandler', 'handle', path, body, postBody)
+    log('SortieHandler', 'state', this.state)
   }
 
-  private clearState() {
+  private initState(body: any) {
     this.state.map = ''
     this.state.diff = 0
     this.state.node = 0
     this.state.diffs = {}
+    for (const map of body.api_map_info) {
+      this.state.diffs[map.api_id] = (map.api_eventmap || {}).api_selected_rank || 0
+    }
   }
 
-  private setSortieState(body: any) {
+  private clearSortieState() {
+    this.state.map = ''
+    this.state.diff = 0
+    this.state.node = 0
+  }
+
+  private initSortieState(body: any) {
     this.state.map = `${body.api_maparea_id}-${body.api_mapinfo_no}`
     this.state.diff = this.state.diffs[body.api_maparea_id * 10 + body.api_mapinfo_no] || 0
     this.state.node = body.api_no

@@ -1,6 +1,6 @@
 {
   "name": "poi-plugin-tsundb",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "TsunDB data submission plugin for Poi",
   "keywords": [
     "kancolle",
@@ -11,7 +11,10 @@
   "repository": "git@github.com:kcwiki/poi-plugin-tsundb.git",
   "homepage": "https://github.com/kcwiki/poi-plugin-tsundb#readme",
   "bugs": "https://github.com/kcwiki/poi-plugin-tsundb/issues",
-  "author": "gk <gkpyon@gmail.com>",
+  "author": {
+    "name": "gakada",
+    "url": "https://github.com/gakada"
+  },
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -22,30 +25,28 @@
     "format": "prettier --loglevel warn --write '**/*.{ts,json,yml,md}'",
     "lint": "tslint --project tsconfig.json --fix",
     "lint-check": "tslint-config-prettier-check ./tslint.json",
-    "build": "tsc",
-    "test": "rimraf dist && yarn format && yarn lint && yarn build && cross-env DEBUG=t tape -r ts-node/register tests/*.ts",
-    "serve": "ts-node scripts/run-server.ts",
+    "clean": "rm -rf build dist server/dist",
+    "build": "yarn clean && tsc && mv build/server server/dist && mkdir -p dist && mv build/client/* dist",
+    "test": "yarn format && yarn lint && yarn build && cross-env TSUNDB_API_URL=http://localhost:12345/api tape -r ts-node/register tests",
+    "serve": "ts-node server/index.ts",
     "prepack": "yarn test",
     "upgrade": "yarn upgrade --latest && yarn upgrade-interactive"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.1.2",
     "@commitlint/config-conventional": "^7.1.2",
-    "@types/body-parser": "^1.17.0",
     "@types/fs-extra": "^5.0.4",
     "@types/node": "^10.11.3",
     "@types/node-fetch": "^2.1.2",
-    "@types/restify": "^7.2.5",
     "@types/tape": "^4.2.32",
     "body-parser": "^1.18.3",
     "cross-env": "^5.2.0",
+    "fastify": "^1.12.1",
     "fs-extra": "^7.0.0",
     "husky": "^1.0.1",
     "lint-staged": "^7.3.0",
     "node-fetch": "^2.2.0",
     "prettier": "^1.14.3",
-    "restify": "^7.2.1",
-    "rimraf": "^2.6.2",
     "tape": "^4.9.1",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
@@ -74,8 +75,8 @@
     "trailingComma": "all"
   },
   "poiPlugin": {
-    "title": "TsunDB Reporter",
-    "description": "Report data to TsunDB (https://tsundb.kc3.moe/)",
+    "title": "Plugin.Title",
+    "description": "Plugin.Description",
     "icon": "fa/pie-chart",
     "priority": 100
   }
