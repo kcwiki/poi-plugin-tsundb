@@ -2,61 +2,65 @@ import fastify from 'fastify'
 import { outputJson } from 'fs-extra'
 import fetch from 'node-fetch'
 
-export const sendData = async (url: string, ua: string, path: string, data: {}) => {
-  try {
-    const response = await fetch(`${url}/${path}`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'user-agent': ua,
-      },
-      body: JSON.stringify(data),
-    })
-    return response
-  } catch (err) {
-    console.error(err.stack)
-    return
-  }
+export const sendData = async (url: string, path: string, ua: string, ver: string, data: {}) => {
+  const response = await fetch(`${url}/${path}`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'user-agent': ua,
+      'tsun-ver': ver,
+    },
+    body: JSON.stringify(data),
+  })
+  return response
 }
 
-const db: { [_: number]: { ua: string; path: string; data: {} } } = {}
+const db: { [_: number]: { path: string; data: {} } } = {}
 
-const insert = (ua: string, path: string, data: {}) => {
-  db[+new Date()] = { ua, path, data }
+const insert = (path: string, data: {}) => {
+  db[+new Date()] = { path, data }
   outputJson(`${__dirname}/tmp/db.json`, db, { spaces: 2 })
 }
 
-const server = fastify({ logger: true })
+const server = fastify()
 
 server.post('/api/*', async (req, res) => {
-  const ua = req.headers['user-agent']
   const path = (req.req.url || '').replace('/api/', '')
+  const ua = req.headers['user-agent']
+  const ver = req.headers['tsun-ver']
   const data = req.body
-  if (!ua || !path || !data) {
+  console.log(path, ua, ver, data && JSON.stringify(data))
+  if (!ua || !ver || !path || !data) {
     res.status(400)
-    res.send('bad request to proxy')
+    res.send({ error: 'bad request to proxy' })
     return
   }
   if (process.env.TSUNDB_API_URL) {
-    const response = await sendData(process.env.TSUNDB_API_URL, ua, path, data)
+    const response = await sendData(process.env.TSUNDB_API_URL, path, ua, ver, data)
     if (!response) {
       res.status(500)
-      res.send('bad upstream response')
+      res.send({ error: 'bad upstream response' })
       return
     }
     if (response.status !== 200) {
-      res.status(response.status)
-      res.send(response.statusText)
-    } else {
-      res.send('ok')
+      try {
+        res.status(response.status)
+        res.send(await response.json())
+        return
+      } catch (_) {
+        res.status(response.status)
+        res.send(response.statusText)
+        return
+      }
     }
-  } else {
-    insert(ua, path, data)
     res.send('ok')
+    return
   }
+  insert(path, data)
+  res.send('ok')
 })
 
-const port = process.env.port || process.env.TSUNDB_SERVER_PORT ? Number(process.env.port || process.env.TSUNDB_SERVER_PORT) : 12345
+const port = process.env.TSUNDB_SERVER_PORT ? Number(process.env.TSUNDB_SERVER_PORT) : 12345
 
 server.listen(port, '::', (err, address) => {
   if (err) {

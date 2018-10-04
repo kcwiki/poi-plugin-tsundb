@@ -16,14 +16,19 @@ export const sendData = async (path: string, data: {}) => {
       headers: {
         'content-type': 'application/json',
         'user-agent': USER_AGENT,
+        'tsun-ver': 'Kasumi',
       },
       body: JSON.stringify(data),
     })
     log('sendData', url, data)
     if (response.status !== 200) {
-      console.error('poi-plugin-tsundb', 'response', response.status, response.statusText)
+      try {
+        console.error('poi-plugin-tsundb', 'response', response.status, await response.json())
+      } catch (_) {
+        console.error('poi-plugin-tsundb', 'response', response.status)
+      }
     } else {
-      log('response', response.status, response.statusText)
+      log('response', response.status)
     }
     return response
   } catch (err) {
