@@ -43,15 +43,15 @@ server.post('/api/*', async (req, res) => {
       return
     }
     if (response.status !== 200) {
+      res.status(response.status)
+      let json
       try {
-        res.status(response.status)
-        res.send(await response.json())
-        return
+        json = await response.json()
       } catch (_) {
-        res.status(response.status)
-        res.send(response.statusText)
-        return
+        json = null
       }
+      res.send(json || response.statusText)
+      return
     }
     res.send('ok')
     return

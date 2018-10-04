@@ -7,10 +7,24 @@ interface ISortieState {
   node: number
 }
 
+const getPlaneCounts = (data: any) => {
+  const planes: number = ((data || {}).api_stage1 || {}).api_e_count || 0
+  const lost: number = ((data || {}).api_stage1 || {}).api_e_lostcount || 0
+  const bombers: number = ((data || {}).api_stage2 || {}).api_e_count || 0
+  return planes ? { planes, bombersMin: bombers, bombersMax: bombers + lost } : undefined
+}
+
+const getFirstPlaneCounts = (data: any) =>
+  getPlaneCounts((data || {}).api_air_base_injection) ||
+  getPlaneCounts((data || {}).api_injection_kouku) ||
+  getPlaneCounts(((data || {}).api_air_base_attack || [])[0]) ||
+  getPlaneCounts((data || {}).api_kouku) || { planes: undefined, bombersMin: undefined, bombersMax: undefined }
+
 const sendEnemyComp = (map: string, node: number, difficulty: number, body: any, isAirRaid?: true) => {
   if (!map || !node) {
     return
   }
+  const { planes, bombersMin, bombersMax } = getFirstPlaneCounts(body)
   sendData('enemy-comp', {
     map,
     node,
@@ -29,6 +43,9 @@ const sendEnemyComp = (map: string, node: number, difficulty: number, body: any,
       statsEscort: body.api_eParam_combined,
       equipEscort: body.api_eSlot_combined,
       isAirRaid,
+      planes,
+      bombersMin,
+      bombersMax,
     },
   })
 }

@@ -59,6 +59,7 @@ Reference: [`src/library/modules/TsunDBSubmission.js`](https://github.com/KC3Kai
     statsEscort: [[Number]],
     equipEscort: [[Number]],
     isAirRaid: True,
+    // Additional optional fields are supported
   },
   datetime: String, // timestamp without time zone
 }
@@ -88,6 +89,7 @@ Reference: [`client/handlers/sortie.ts`](https://github.com/kcwiki/poi-plugin-ts
     statsEscort: [[Number]],
     equipEscort: [[Number]],
     isAirRaid: True,
+    // Additional optional fields can be added
   },
 }
 ```
