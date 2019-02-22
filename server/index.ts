@@ -4,7 +4,7 @@ import fetch from 'node-fetch'
 
 export const sendData = async (url: string, path: string, ua: string, ver: string, data: {}) => {
   const response = await fetch(`${url}/${path}`, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'content-type': 'application/json',
       'user-agent': ua,
@@ -24,7 +24,7 @@ const insert = (path: string, data: {}) => {
 
 const server = fastify()
 
-server.post('/api/*', async (req, res) => {
+server.put('/api/*', async (req, res) => {
   const path = (req.req.url || '').replace('/api/', '')
   const ua = req.headers['user-agent']
   const ver = req.headers['tsun-ver']

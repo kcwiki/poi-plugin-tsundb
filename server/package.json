@@ -6,8 +6,8 @@
     "start": "node ."
   },
   "dependencies": {
+    "fastify": "^1.12.1",
     "fs-extra": "^7.0.0",
-    "node-fetch": "^2.2.0",
-    "fastify": "^1.12.1"
+    "node-fetch": "^2.2.0"
   }
 }

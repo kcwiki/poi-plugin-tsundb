@@ -2,6 +2,7 @@
   "name": "tsundb",
   "alias": "tsundb",
   "public": true,
+  "version": 1,
   "env": {
     "NODE_ENV": "production",
     "TSUNDB_API_URL": "https://tsundb.kc3.moe/api"
