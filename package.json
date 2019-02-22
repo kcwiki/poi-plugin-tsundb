@@ -1,6 +1,6 @@
 {
   "name": "poi-plugin-tsundb",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "TsunDB data submission plugin for Poi",
   "keywords": [
     "kancolle",
