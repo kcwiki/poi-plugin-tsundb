@@ -6,7 +6,7 @@ export const fromServer = (path: string) =>
   new Promise(resolve => {
     const reports: any[] = []
     const server = fastify()
-    server.post(`/api/${path}`, ({ body }, res) => {
+    server.put(`/api/${path}`, ({ body }, res) => {
       res.send('ok')
       reports.push(body)
       if (reports.length === 2) {

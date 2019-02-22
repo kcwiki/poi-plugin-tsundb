@@ -12,11 +12,11 @@ export const sendData = async (path: string, data: {}) => {
   try {
     const url = `${API_URL}/${path}`
     const response = await fetch(url, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'content-type': 'application/json',
         'user-agent': USER_AGENT,
-        'tsun-ver': 'Kasumi',
+        'tsun-ver': 'Kasumi Kai',
       },
       body: JSON.stringify(data),
     })
