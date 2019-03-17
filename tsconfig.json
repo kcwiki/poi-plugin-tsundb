@@ -6,9 +6,9 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "build",
+    "outDir": "dist",
     "strict": true,
     "target": "es2017"
   },
-  "include": ["client", "server", "tests"]
+  "include": ["src"]
 }

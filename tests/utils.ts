@@ -1,6 +1,6 @@
 import fastify from 'fastify'
 
-import { handleResponse, pluginDidLoad } from '../client'
+import { handleResponse, pluginDidLoad } from '../src'
 
 export const fromServer = (path: string) =>
   new Promise(resolve => {
