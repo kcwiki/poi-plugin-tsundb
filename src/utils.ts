@@ -4,28 +4,30 @@ import { resolve } from 'path'
 
 const { name: PACKAGE_NAME, version: PACKAGE_VERSION } = readJsonSync(resolve(__dirname, '../package.json'))
 
-const USER_AGENT = `${PACKAGE_NAME} v${PACKAGE_VERSION}`
+const USER_AGENT = `${PACKAGE_NAME}/${PACKAGE_VERSION}`
 
-const API_URL = process.env.TSUNDB_API_URL || 'https://tsundb.kc3.moe/api'
+const API_URL = process.env.TSUNDB_API_URL || 'https://tsundb.kc3.moe'
 
 export const sendData = async (path: string, data: {}) => {
   try {
-    const url = `${API_URL}/${path}`
+    const url = `${API_URL}/api/${path}`
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
         'content-type': 'application/json',
-        'user-agent': USER_AGENT,
         'tsun-ver': 'Kasumi Kai',
+        dataorigin: 'poi',
+        version: PACKAGE_VERSION,
+        'user-agent': USER_AGENT,
       },
       body: JSON.stringify(data),
     })
     log('sendData', url, data)
     if (response.status !== 200) {
       try {
-        console.error('poi-plugin-tsundb', 'response', response.status, await response.json())
+        console.error(PACKAGE_NAME, 'response', response.status, await response.json())
       } catch (_) {
-        console.error('poi-plugin-tsundb', 'response', response.status)
+        console.error(PACKAGE_NAME, 'response', response.status)
       }
     } else {
       log('response', response.status)
@@ -39,6 +41,6 @@ export const sendData = async (path: string, data: {}) => {
 
 export const log = (...args: any[]) => {
   if (process.env.DEBUG) {
-    console.log('poi-plugin-tsundb', ...args)
+    console.log(PACKAGE_NAME, ...args)
   }
 }

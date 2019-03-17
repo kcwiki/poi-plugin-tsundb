@@ -14,7 +14,7 @@ export const fromServer = (path: string) =>
         resolve(reports)
       }
     })
-    server.listen(process.env.TSUNDB_SERVER_PORT ? Number(process.env.TSUNDB_SERVER_PORT) : 12345)
+    server.listen(12345)
   })
 
 export const mockPoiWindow = () => {

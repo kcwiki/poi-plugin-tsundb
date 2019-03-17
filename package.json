@@ -25,7 +25,7 @@
     "format": "prettier --loglevel warn --write '**/*.{ts,json,yml,md}'",
     "lint": "tslint --project tsconfig.json --fix",
     "build": "rimraf dist && tsc",
-    "test": "yarn format && yarn lint && yarn build && cross-env TSUNDB_API_URL=http://localhost:12345/api tape -r ts-node/register tests",
+    "test": "yarn format && yarn lint && yarn build && cross-env TSUNDB_API_URL=http://localhost:12345 tape -r ts-node/register tests",
     "prepack": "yarn test",
     "up": "yarn upgrade --latest"
   },
