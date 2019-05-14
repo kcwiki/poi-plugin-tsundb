@@ -13,8 +13,6 @@ interface ISortieState {
   gaugeNum: number
 }
 
-let store = (window as any).getStore()
-
 const getPlaneCounts = (data: any) => {
   const planes: number = ((data || {}).api_stage1 || {}).api_e_count || 0
   const lost: number = ((data || {}).api_stage1 || {}).api_e_lostcount || 0
@@ -30,24 +28,23 @@ const getFirstPlaneCounts = (data: any) =>
 
 const getShipData = (ship: any) => ({
   id: ship.api_ship_id,
-  name: store.const.$ships[ship.api_ship_id].api_name,
+  name: (window as any).$ships[ship.api_ship_id].api_name,
   shiplock: ship.api_sally_area || 0,
   level: ship.api_lv,
-  type: store.const.$ships[ship.api_ship_id].api_stype,
+  type: (window as any).$ships[ship.api_ship_id].api_stype,
   speed: ship.api_soku,
-  slots: ship.api_onslot.slice(0, ship.api_slotnum),
-  equip: ship.api_slot.slice(0, ship.api_slotnum).map((equipId: number) => (store.info.equips[equipId] || {}).api_slotitem_id || -1),
-  exslot: (store.info.equips[ship.api_slot_ex] || {}).api_slotitem_id || -1,
+  equip: ship.api_slot.slice(0, ship.api_slotnum).map((equipId: number) => ((window as any)._slotitems[equipId] || {}).api_slotitem_id || -1),
+  exslot: ((window as any)._slotitems[ship.api_slot_ex] || {}).api_slotitem_id || -1,
 })
 
 const getFleet = (deckId: number, callback: any) => (window as any)._decks[deckId - 1].api_ship.filter((shipId: number) => shipId > 0).map(callback)
 
 const getFleetData = (deckId: number) => {
-  const isCombined = deckId === 1 && store.sortie.combinedFlag
-  const getShip = (shipId: number) => getShipData(store.info.ships[shipId])
+  const isCombined = deckId === 1 && (window as any).getStore().sortie.combinedFlag
+  const getShip = (shipId: number) => getShipData((window as any)._ships[shipId])
   const fleet1 = getFleet(deckId, getShip)
   const fleet2 = getFleet(2, getShip)
-  const escapedPos = store.sortie.escapedPos
+  const escapedPos = (window as any).getStore().sortie.escapedPos
 
   const prepareFleetData = (fleet: any, escaped: number[], index: number) => {
     const ids = []
@@ -71,15 +68,15 @@ const getFleetData = (deckId: number) => {
 
   const getFleetF33 = (deck: number, mapMod: number, fleetData: any) => {
     const getShipF33 = (mapModifier: number) => (shipId: number) => {
-      const ship = store.info.ships[shipId]
+      const ship = (window as any)._ships[shipId]
       let shipLos = ship.api_sakuteki[0]
       let equipLos = 0
       for (const equipId of ship.api_slot) {
         if (equipId < 1) {
           continue
         }
-        const equip = store.info.equips[equipId]
-        const master = store.const.$equips[equip.api_slotitem_id]
+        const equip = (window as any)._slotitems[equipId]
+        const master = (window as any).$slotitems[equip.api_slotitem_id]
         shipLos -= master.api_saku
         equipLos += getEquipmentF33(master, equip)
       }
@@ -133,7 +130,7 @@ const getFleetData = (deckId: number) => {
           fleettwoexslots,
           fleettwotypes,
           fleetSpeed: Math.min(fleetonespeed, fleettwospeed),
-          fleetType: store.sortie.combinedFlag,
+          fleetType: (window as any).getStore().sortie.combinedFlag,
           los: fleetonelos.map((value, index) => value + fleettwolos[index]),
         }),
   }
@@ -321,7 +318,6 @@ export default class SortieHandler implements IHandler {
 
   private initStartState(body: any, postBody: any) {
     // update store for new equipment changes
-    store = (window as any).getStore()
     this.state.edges = []
     this.state.deckId = Number(postBody.api_deck_id)
     this.state.nodeAmount = body.api_cell_data.length
