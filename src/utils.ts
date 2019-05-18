@@ -63,3 +63,35 @@ export const getEquipmentF33 = (master: any, equip: any) => {
       return master.api_saku * 0.6
   }
 }
+
+// Generate an object with indexes as current ship id and values as previous form ship id
+const generateRemodels = () => {
+  const remodels: { [_: string]: number } = {}
+  for (let i = 1; i < 999; i++) {
+    const ship = (window as any).$ships[i]
+    if (!ship) {
+      continue
+    }
+    // If there is already previous id, skip, for the case of revertible remodels
+    if (ship.api_aftershipid && !remodels[ship.api_aftershipid]) {
+      remodels[ship.api_aftershipid] = ship.api_id
+    }
+  }
+  return remodels
+}
+
+export const getShipCount = () => {
+  const prevIds = generateRemodels()
+  function getBaseForm(shipId: number, remodelObject: { [_: string]: number }): number {
+    return !remodelObject[shipId] ? shipId : getBaseForm(remodelObject[shipId], remodelObject)
+  }
+  const fill = (object: { [_: string]: number }, key: number) => (object[key] = (object[key] || 0) + 1)
+  const count: { [_: string]: number } = {}
+  for (const shipKey in (window as any)._ships) {
+    if (!(window as any)._ships[shipKey]) {
+      continue
+    }
+    fill(count, getBaseForm((window as any)._ships[shipKey].api_ship_id, prevIds))
+  }
+  return count
+}

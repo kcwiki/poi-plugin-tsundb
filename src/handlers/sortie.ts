@@ -1,5 +1,5 @@
 import IHandler from '.'
-import { getEquipmentF33, log, sendData } from '../utils'
+import { getEquipmentF33, getShipCount, log, sendData } from '../utils'
 
 interface ISortieState {
   map: string
@@ -11,6 +11,7 @@ interface ISortieState {
   cleared: boolean
   gaugeType: number
   gaugeNum: number
+  formation: number
 }
 
 const getPlaneCounts = (data: any) => {
@@ -202,6 +203,50 @@ const sendRouting = (
   })
 }
 
+const sendDrop = (map: string, node: number, difficulty: number, cleared: boolean, formation: number, body: any) => {
+  // Don't send if slots are full
+  if (
+    (Object.keys((window as any)._ships).length >= (window as any).getStore().info.basic.api_max_chara ||
+      Object.keys((window as any)._ships).length >= (window as any).getStore().info.basic.api_max_slotitem - 3) &&
+    !body.api_get_ship
+  ) {
+    return
+  }
+
+  const sendDropData = (data: any) => sendData('drops', data)
+  const sendDropLocs = (shipdrop: any) =>
+    sendData('droplocs', {
+      ship: shipdrop.ship,
+      map: shipdrop.map,
+      node: shipdrop.node,
+      rank: shipdrop.rank,
+      difficulty: shipdrop.difficulty,
+    })
+
+  for (const func of [sendDropData, sendDropLocs]) {
+    func.call(
+      {},
+      {
+        map,
+        node,
+        rank: body.api_win_rank,
+        cleared,
+        enemyComp: {
+          ship: body.api_ship_id,
+          mapName: body.api_quest_name,
+          compName: body.api_enemy_info.api_deck_name,
+          baseExp: body.api_get_base_exp,
+          formation,
+        },
+        hqLvl: (window as any)._teitokuLv,
+        difficulty,
+        ship: body.api_get_ship ? body.api_get_ship.api_ship_id : -1,
+        counts: getShipCount(),
+      },
+    )
+  }
+}
+
 interface IState extends ISortieState {
   diffs: { [_: string]: number }
   clears: { [_: string]: number }
@@ -220,6 +265,7 @@ export default class SortieHandler implements IHandler {
     cleared: false,
     gaugeType: 0,
     gaugeNum: 0,
+    formation: 0,
     diffs: {},
     clears: {},
     gaugeTypes: {},
@@ -269,11 +315,13 @@ export default class SortieHandler implements IHandler {
       case 'api_req_combined_battle/sp_midnight':
       case 'api_req_combined_battle/ec_night_to_day':
         sendEnemyComp(this.state.map, this.state.node, this.state.diff, body)
+        this.state.formation = (body.api_formation || [])[1] || 0
+        break
+      case 'api_req_sortie/battleresult':
+      case 'api_req_combined_battle/battleresult':
+        sendDrop(this.state.map, this.state.node, this.state.diff, this.state.cleared, this.state.formation, body)
         this.clearSortieState()
         break
-      // case 'api_req_sortie/battleresult':
-      // case 'api_req_combined_battle/battleresult':
-      // break
       default:
         return
     }
@@ -301,6 +349,7 @@ export default class SortieHandler implements IHandler {
     this.state.cleared = false
     this.state.gaugeNum = 0
     this.state.gaugeType = 0
+    this.state.formation = 0
   }
 
   private initSortieState(body: any, postBody: any) {
@@ -317,7 +366,6 @@ export default class SortieHandler implements IHandler {
   }
 
   private initStartState(body: any, postBody: any) {
-    // update store for new equipment changes
     this.state.edges = []
     this.state.deckId = Number(postBody.api_deck_id)
     this.state.nodeAmount = body.api_cell_data.length
