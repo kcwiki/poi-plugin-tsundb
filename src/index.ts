@@ -1,7 +1,7 @@
-import IHandler from './handlers'
-import SortieHandler from './handlers/sortie'
+import Handler from './handler'
+import SortieHandler from './sortie'
 
-let reporters: IHandler[] = []
+let reporters: Handler[] = []
 
 export const handleResponse = (e: any) => {
   for (const reporter of reporters) {
@@ -16,7 +16,7 @@ export const handleResponse = (e: any) => {
 export const show = false
 
 export const pluginDidLoad = () => {
-  reporters = [new SortieHandler() as IHandler]
+  reporters = [new SortieHandler() as Handler]
   window.addEventListener('game.response', handleResponse)
 }
 

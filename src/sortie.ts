@@ -1,7 +1,7 @@
-import IHandler from '.'
-import { getEquipmentF33, getShipCount, log, sendData } from '../utils'
+import Handler from './handler'
+import { getEquipmentF33, getShipCount, log, sendData } from './utils'
 
-interface ISortieState {
+interface SortieState {
   map: string
   diff: number
   node: number
@@ -247,15 +247,15 @@ const sendDrop = (map: string, node: number, difficulty: number, cleared: boolea
   }
 }
 
-interface IState extends ISortieState {
+interface State extends SortieState {
   diffs: { [_: string]: number }
   clears: { [_: string]: number }
   gaugeTypes: { [_: string]: number }
   gaugeNums: { [_: string]: number }
 }
 
-export default class SortieHandler implements IHandler {
-  private readonly state: IState = {
+export default class SortieHandler implements Handler {
+  private readonly state: State = {
     map: '',
     diff: 0,
     node: 0,

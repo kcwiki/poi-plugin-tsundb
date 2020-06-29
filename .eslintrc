@@ -1,0 +1,22 @@
+{
+  "env": { "browser": true, "es6": true, "node": true },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "complexity": ["error", 30],
+    "max-depth": ["error", 5],
+    "max-lines-per-function": ["error", 100],
+    "max-nested-callbacks": ["error", 5],
+    "max-params": ["error", 10],
+    "max-statements": ["error", 50],
+    "no-console": 0
+  }
+}

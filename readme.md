@@ -1,4 +1,4 @@
-# poi-plugin-tsundb
+# `poi-plugin-tsundb`
 
 [![Version](https://img.shields.io/npm/v/poi-plugin-tsundb.svg)](https://www.npmjs.com/package/poi-plugin-tsundb)
 [![Downloads](https://img.shields.io/npm/dm/poi-plugin-tsundb.svg)](https://www.npmjs.com/package/poi-plugin-tsundb)

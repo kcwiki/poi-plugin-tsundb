@@ -8,6 +8,12 @@ const USER_AGENT = `${PACKAGE_NAME}/${PACKAGE_VERSION}`
 
 const API_URL = process.env.TSUNDB_API_URL || 'https://tsundb.kc3.moe'
 
+export const log = (...args: any[]) => {
+  if (process.env.DEBUG) {
+    console.log(PACKAGE_NAME, ...args)
+  }
+}
+
 export const sendData = async (path: string, data: {}) => {
   try {
     const url = `${API_URL}/api/${path}`
@@ -36,12 +42,6 @@ export const sendData = async (path: string, data: {}) => {
   } catch (err) {
     console.error(err.stack)
     return
-  }
-}
-
-export const log = (...args: any[]) => {
-  if (process.env.DEBUG) {
-    console.log(PACKAGE_NAME, ...args)
   }
 }
 
