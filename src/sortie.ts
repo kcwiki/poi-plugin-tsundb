@@ -1,5 +1,5 @@
 import Handler from './handler'
-import { getEquipmentF33, getShipCount, log, sendData } from './utils'
+import { getEquipmentF33, getShipCounts, log, sendData } from './utils'
 
 interface SortieState {
   map: string
@@ -241,7 +241,7 @@ const sendDrop = (map: string, node: number, difficulty: number, cleared: boolea
         hqLvl: (window as any)._teitokuLv,
         difficulty,
         ship: body.api_get_ship ? body.api_get_ship.api_ship_id : -1,
-        counts: getShipCount(),
+        counts: getShipCounts(),
       },
     )
   }

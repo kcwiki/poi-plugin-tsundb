@@ -1,6 +1,7 @@
 import { readJsonSync } from 'fs-extra'
 import fetch from 'node-fetch'
 import { resolve } from 'path'
+import _ from 'lodash'
 
 const { name: PACKAGE_NAME, version: PACKAGE_VERSION } = readJsonSync(resolve(__dirname, '../package.json'))
 
@@ -14,7 +15,7 @@ export const log = (...args: any[]) => {
   }
 }
 
-export const sendData = async (path: string, data: {}) => {
+export const sendData = async (path: string, data: any) => {
   try {
     const url = `${API_URL}/api/${path}`
     const response = await fetch(url, {
@@ -64,34 +65,16 @@ export const getEquipmentF33 = (master: any, equip: any) => {
   }
 }
 
-// Generate an object with indexes as current ship id and values as previous form ship id
-const generateRemodels = () => {
-  const remodels: { [_: string]: number } = {}
-  for (let i = 1; i < 999; i++) {
-    const ship = (window as any).$ships[i]
-    if (!ship) {
-      continue
-    }
-    // If there is already previous id, skip, for the case of revertible remodels
-    if (ship.api_aftershipid && !remodels[ship.api_aftershipid]) {
-      remodels[ship.api_aftershipid] = ship.api_id
-    }
-  }
-  return remodels
-}
+const getPrevIds = () =>
+  _((window as any).$ships)
+    .filter(e => +e.api_aftershipid)
+    .groupBy('api_aftershipid')
+    .mapValues(e => e[0].api_id)
+    .value()
 
-export const getShipCount = () => {
-  const prevIds = generateRemodels()
-  function getBaseForm(shipId: number, remodelObject: { [_: string]: number }): number {
-    return !remodelObject[shipId] ? shipId : getBaseForm(remodelObject[shipId], remodelObject)
-  }
-  const fill = (object: { [_: string]: number }, key: number) => (object[key] = (object[key] || 0) + 1)
-  const count: { [_: string]: number } = {}
-  for (const shipKey in (window as any)._ships) {
-    if (!(window as any)._ships[shipKey]) {
-      continue
-    }
-    fill(count, getBaseForm((window as any)._ships[shipKey].api_ship_id, prevIds))
-  }
-  return count
-}
+const getBaseId = (shipId: number, prevIds = getPrevIds()): number => (!prevIds[shipId] ? shipId : getBaseId(prevIds[shipId], prevIds))
+
+export const getShipCounts = () =>
+  _((window as any)._ships)
+    .countBy(e => getBaseId(e.api_ship_id))
+    .value()
