@@ -10,7 +10,7 @@ const USER_AGENT = `${PACKAGE_NAME}/${PACKAGE_VERSION}`
 const API_URL = process.env.TSUNDB_API_URL || 'https://tsundb.kc3.moe'
 
 export const log = (...args: any[]) => {
-  if (process.env.DEBUG) {
+  if (process.env.DEBUG || (window as any).tsundb_debug) {
     console.log(PACKAGE_NAME, ...args)
   }
 }

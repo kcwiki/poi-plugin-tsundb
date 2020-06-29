@@ -1,6 +1,6 @@
 {
   "name": "poi-plugin-tsundb",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "TsunDB data submission plugin for Poi",
   "keywords": [
     "kancolle",
@@ -9,7 +9,10 @@
     "tsundb"
   ],
   "license": "MIT",
-  "author": "gakada (https://github.com/gakada)",
+  "author": {
+    "name": "gakada",
+    "url": "https://github.com/gakada"
+  },
   "contributors": [
     "sorewachigauyo (https://github.com/sorewachigauyo)"
   ],

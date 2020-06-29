@@ -18,6 +18,8 @@ Paste package name (`poi-plugin-tsundb`) in the plugins tab and click the instal
 The following data is reported:
 
 - Enemy compositions
+- Routing
+- Drops and drop locations
 
 See [API documentation](https://github.com/kcwiki/poi-plugin-tsundb/blob/master/docs/api.md) for more details.
 

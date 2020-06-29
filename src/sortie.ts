@@ -38,7 +38,8 @@ const getShipData = (ship: any) => ({
   exslot: ((window as any)._slotitems[ship.api_slot_ex] || {}).api_slotitem_id || -1,
 })
 
-const getFleet = (deckId: number, callback: any) => (window as any)._decks[deckId - 1].api_ship.filter((shipId: number) => shipId > 0).map(callback)
+const getFleet = (deckId: number, callback: any) =>
+  (((window as any)._decks[deckId - 1] || {}).api_ship || []).filter((shipId: number) => shipId > 0).map(callback)
 
 const getFleetData = (deckId: number) => {
   const isCombined = deckId === 1 && (window as any).getStore().sortie.combinedFlag
