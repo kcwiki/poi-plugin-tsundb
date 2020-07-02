@@ -141,7 +141,7 @@ const getFleetData = (deckId: number) => {
 const getEventData = (body: any, difficulty: number, gaugeNum: number, gaugeType: number) =>
   body.api_maparea_id < 10
     ? {}
-    : { currentMapHp: body.api_eventmap.api_now_maphp, maxMapHP: body.api_eventmap.api_max_maphp, difficulty, gaugeNum, gaugeType }
+    : { currentMapHP: body.api_eventmap.api_now_maphp, maxMapHP: body.api_eventmap.api_max_maphp, difficulty, gaugeNum, gaugeType }
 
 const sendEnemyComp = (map: string, node: number, difficulty: number, body: any, isAirRaid?: true) => {
   if (!map || !node) {
@@ -280,8 +280,8 @@ export default class SortieHandler implements Handler {
       case 'api_req_map/select_eventmap_rank':
         // update information
         this.state.diffs[Number(postBody.api_maparea_id) * 10 + Number(postBody.api_map_no)] = Number(postBody.api_rank)
-        this.state.gaugeNums[Number(postBody.api_maparea_id) * 10 + Number(postBody.api_map_no)] = Number(body.api_gauge_num)
-        this.state.gaugeTypes[Number(postBody.api_maparea_id) * 10 + Number(postBody.api_map_no)] = Number(body.api_gauge_type)
+        this.state.gaugeNums[Number(postBody.api_maparea_id) * 10 + Number(postBody.api_map_no)] = Number(body.api_maphp.api_gauge_num)
+        this.state.gaugeTypes[Number(postBody.api_maparea_id) * 10 + Number(postBody.api_map_no)] = Number(body.api_maphp.api_gauge_type)
         break
       case 'api_req_map/start':
       case 'api_req_map/next':

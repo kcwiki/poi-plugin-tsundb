@@ -69,10 +69,16 @@ const getPrevIds = () =>
   _((window as any).$ships)
     .filter(e => +e.api_aftershipid)
     .groupBy('api_aftershipid')
-    .mapValues(e => e[0].api_id)
+    .mapValues((es, e1) => (es.length === 1 ? es[0].api_id : es.filter(e2 => +(window as any).$ships[e1].api_aftershipid !== e2.api_id)[0].api_id))
     .value()
 
-const getBaseId = (shipId: number, prevIds = getPrevIds()): number => (!prevIds[shipId] ? shipId : getBaseId(prevIds[shipId], prevIds))
+const getBaseId = (shipId: number, prevIds = getPrevIds(), i = 0): number => {
+  if (i > 10) {
+    console.warn(PACKAGE_NAME, 'getBaseId', `loop detected for ${shipId}`)
+    return shipId
+  }
+  return !prevIds[shipId] ? shipId : getBaseId(prevIds[shipId], prevIds, i + 1)
+}
 
 export const getShipCounts = () =>
   _((window as any)._ships)
