@@ -51,7 +51,7 @@ export const getEquipmentF33 = (master: any, equip: any) => {
     case 8:
       return master.api_saku * 0.8
     case 9:
-      return master.api_saku * 1.0
+      return (master.api_saku + 1.2 * Math.sqrt(equip.api_level || 0)) * 1.0
     case 10:
       return (master.api_saku + 1.2 * Math.sqrt(equip.api_level || 0)) * 1.2
     case 11:
@@ -59,7 +59,7 @@ export const getEquipmentF33 = (master: any, equip: any) => {
     case 12:
       return (master.api_saku + 1.25 * Math.sqrt(equip.api_level || 0)) * 0.6
     case 13:
-      return (master.api_saku + 1.25 * Math.sqrt(equip.api_level || 0)) * 0.6
+      return (master.api_saku + 1.4 * Math.sqrt(equip.api_level || 0)) * 0.6
     default:
       return master.api_saku * 0.6
   }
