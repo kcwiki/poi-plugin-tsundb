@@ -27,4 +27,4 @@ mockPoiWindow()
 
 pluginDidLoad()
 
-export const fire = (path: string, body: {} = {}, postBody: {} = {}) => handleResponse({ detail: { path: `/kcsapi/${path}`, body, postBody } })
+export const fire = (path: string, body: any = {}, postBody: any = {}) => handleResponse({ detail: { path: `/kcsapi/${path}`, body, postBody } })
