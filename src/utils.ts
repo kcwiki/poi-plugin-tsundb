@@ -66,22 +66,31 @@ export const getEquipmentF33 = (master: any, equip: any) => {
   }
 }
 
-const getPrevIds = () =>
+const getActualPrevId = (es: { api_id: number }[], forId: string): number | null =>
+  es.length === 1 ? es[0].api_id : (es.find(e => +(window as any).$ships[forId].api_aftershipid !== e.api_id) || {}).api_id || null
+
+const getPrevIds = (): { [_: number]: number | null } =>
   _((window as any).$ships)
     .filter(e => +e.api_aftershipid)
     .groupBy('api_aftershipid')
-    .mapValues((es, e1) => (es.length === 1 ? es[0].api_id : es.filter(e2 => +(window as any).$ships[e1].api_aftershipid !== e2.api_id)[0].api_id))
+    .mapValues((es, forId) => getActualPrevId(es, forId))
     .value()
 
-const getBaseId = (shipId: number, prevIds = getPrevIds(), i = 0): number => {
-  if (i > 10) {
-    console.warn(PACKAGE_NAME, 'getBaseId', `loop detected for ${shipId}`)
-    return shipId
+const getBaseId = (shipId: number, prevIds: { [_: number]: number | null }): number => {
+  for (let i = 0, id = shipId; i < 10; ++i) {
+    const prev = prevIds[id]
+    if (!prev) {
+      return id
+    }
+    id = prev
   }
-  return !prevIds[shipId] ? shipId : getBaseId(prevIds[shipId], prevIds, i + 1)
+  console.warn(PACKAGE_NAME, 'getBaseId', `can't find base id for ${shipId}`)
+  return shipId
 }
 
-export const getShipCounts = () =>
-  _((window as any)._ships)
-    .countBy(e => getBaseId(e.api_ship_id))
+export const getShipCounts = (): { [_: number]: number } => {
+  const prevIds = getPrevIds()
+  return _((window as any)._ships)
+    .countBy(e => getBaseId(e.api_ship_id, prevIds))
     .value()
+}
