@@ -1,23 +1,16 @@
-import { readJsonSync } from 'fs-extra'
 import fetch from 'node-fetch'
-import { resolve } from 'path'
 import _ from 'lodash'
-
-const { name: PACKAGE_NAME, version: PACKAGE_VERSION } = readJsonSync(resolve(__dirname, '../package.json'))
-
-const USER_AGENT = `${PACKAGE_NAME}/${PACKAGE_VERSION}`
-
-const API_URL = process.env.TSUNDB_API_URL || 'https://tsundb.kc3.moe'
+import { name, version } from '../package.json'
 
 export const log = (...args: any[]) => {
   if (process.env.DEBUG || (window as any).tsundb_debug) {
-    console.log(PACKAGE_NAME, ...args)
+    console.log(name, ...args)
   }
 }
 
 export const sendData = async (path: string, data: any) => {
   try {
-    const url = `${API_URL}/api/${path}`
+    const url = `${process.env.TSUNDB_API_URL || 'https://tsundb.kc3.moe'}/api/${path}`
     const poiVersion = _.get(window, 'POI_VERSION', 'unknown')
     const response = await fetch(url, {
       method: 'PUT',
@@ -25,17 +18,17 @@ export const sendData = async (path: string, data: any) => {
         'content-type': 'application/json',
         'tsun-ver': 'Kasumi Kai',
         dataorigin: 'poi',
-        version: `${PACKAGE_VERSION}/${poiVersion}`,
-        'user-agent': USER_AGENT,
+        version: `${version}/${poiVersion}`,
+        'user-agent': `${name}/${version} poi/${poiVersion}`,
       },
       body: JSON.stringify(data),
     })
     log('sendData', url, data)
     if (response.status !== 200) {
       try {
-        console.error(PACKAGE_NAME, 'response', response.status, await response.json())
+        console.error(name, 'response', response.status, await response.json())
       } catch (_) {
-        console.error(PACKAGE_NAME, 'response', response.status)
+        console.error(name, 'response', response.status)
       }
     } else {
       log('response', response.status)
@@ -84,7 +77,7 @@ const getBaseId = (shipId: number, prevIds: { [_: number]: number | null }): num
     }
     id = prev
   }
-  console.warn(PACKAGE_NAME, 'getBaseId', `can't find base id for ${shipId}`)
+  console.warn(name, 'getBaseId', `can't find base id for ${shipId}`)
   return shipId
 }
 
