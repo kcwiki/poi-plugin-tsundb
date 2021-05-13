@@ -21,11 +21,11 @@ The following data is reported:
 - Routing
 - Drops and drop locations
 
-See [API documentation](https://github.com/kcwiki/poi-plugin-tsundb/blob/master/docs/api.md) for more details.
+See [API documentation](doc/api.md) for more details.
 
 ## Development
 
-See [development documentation](https://github.com/kcwiki/poi-plugin-tsundb/blob/master/docs/dev.md).
+See [development documentation](doc/dev.md).
 
 ## Credits
 

@@ -18,13 +18,14 @@ export const log = (...args: any[]) => {
 export const sendData = async (path: string, data: any) => {
   try {
     const url = `${API_URL}/api/${path}`
+    const poiVersion = _.get(window, 'POI_VERSION', 'unknown')
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
         'content-type': 'application/json',
         'tsun-ver': 'Kasumi Kai',
         dataorigin: 'poi',
-        version: PACKAGE_VERSION,
+        version: `${PACKAGE_VERSION}/${poiVersion}`,
         'user-agent': USER_AGENT,
       },
       body: JSON.stringify(data),
