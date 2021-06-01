@@ -1,6 +1,9 @@
+import { readJsonSync } from 'fs-extra'
 import fetch from 'node-fetch'
+import { resolve } from 'path'
 import _ from 'lodash'
-import { name, version } from '../package.json'
+
+const { name, version } = readJsonSync(resolve(__dirname, '../package.json'))
 
 export const log = (...args: any[]) => {
   if (process.env.DEBUG || (window as any).tsundb_debug) {
@@ -40,24 +43,23 @@ export const sendData = async (path: string, data: any) => {
   }
 }
 
-export const getEquipmentF33 = (master: any, equip: any) => {
-  switch (master.api_type[2]) {
-    case 8:
-      return master.api_saku * 0.8
-    case 9:
-      return (master.api_saku + 1.2 * Math.sqrt(equip.api_level || 0)) * 1.0
-    case 10:
-      return (master.api_saku + 1.2 * Math.sqrt(equip.api_level || 0)) * 1.2
-    case 11:
-      return (master.api_saku + 1.15 * Math.sqrt(equip.api_level || 0)) * 1.1
-    case 12:
-      return (master.api_saku + 1.25 * Math.sqrt(equip.api_level || 0)) * 0.6
-    case 13:
-      return (master.api_saku + 1.4 * Math.sqrt(equip.api_level || 0)) * 0.6
-    default:
-      return master.api_saku * 0.6
-  }
+const losC1: { [_: number]: number } = {
+  9: 1.2,
+  10: 1.2,
+  11: 1.15,
+  12: 1.25,
+  13: 1.4,
 }
+
+const losC2: { [_: number]: number } = {
+  8: 0.8,
+  9: 1.0,
+  10: 1.2,
+  11: 1.1,
+}
+
+export const getEquipmentF33 = (master: any, equip: any): number =>
+  (master.api_saku + (losC1[master.api_type[2]] || 0) * Math.sqrt(equip.api_level || 0)) * (losC2[master.api_type[2]] || 0.6)
 
 const getActualPrevId = (es: { api_id: number }[], forId: string): number | null =>
   es.length === 1 ? es[0].api_id : (es.find(e => +(window as any).$ships[forId].api_aftershipid !== e.api_id) || {}).api_id || null

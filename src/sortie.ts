@@ -41,6 +41,13 @@ const getShipData = (ship: any) => ({
 const getFleet = (deckId: number, callback: any) =>
   (((window as any)._decks[deckId - 1] || {}).api_ship || []).filter((shipId: number) => shipId > 0).map(callback)
 
+const getInvalidEquipmentBonuses = (shipId: number, equipIds: number[]): number =>
+  [651, 656].includes(shipId) && equipIds.find(e => e === 315)
+    ? 3
+    : [65, 69, 83, 84, 93, 95, 99, 102, 105, 106, 107, 87, 91].includes((window as any).$ships[shipId].api_ctype)
+    ? 4 * equipIds.filter(e => e === 315).length
+    : 0
+
 const getFleetData = (deckId: number) => {
   const isCombined = deckId === 1 && (window as any).getStore().sortie.combinedFlag
   const getShip = (shipId: number) => getShipData((window as any)._ships[shipId])
@@ -73,16 +80,14 @@ const getFleetData = (deckId: number) => {
       const ship = (window as any)._ships[shipId]
       let shipLos = ship.api_sakuteki[0]
       let equipLos = 0
-      for (const equipId of ship.api_slot) {
-        if (equipId < 1) {
-          continue
-        }
+      const equipIds = [...ship.api_slot, ship.api_slot_ex].filter(e => +e >= 1)
+      for (const equipId of equipIds) {
         const equip = (window as any)._slotitems[equipId]
         const master = (window as any).$slotitems[equip.api_slotitem_id]
         shipLos -= master.api_saku
         equipLos += getEquipmentF33(master, equip)
       }
-      return Math.sqrt(shipLos) + equipLos * mapModifier
+      return Math.sqrt(shipLos - getInvalidEquipmentBonuses(ship.api_ship_id, equipIds)) + equipLos * mapModifier
     }
     return (
       getFleet(deck, getShipF33(mapMod)).reduce((acc: number, value: number) => acc + value, 0) -
@@ -109,7 +114,7 @@ const getFleetData = (deckId: number) => {
   } = prepareFleetData(fleet2, escapedPos, 6)
 
   const fleetonelos = [1, 2, 3, 4].map(mapModifier => getFleetF33(deckId, mapModifier, fleet1))
-  const fleettwolos = [1, 2, 3, 4].map(mapModifier => getFleetF33(deckId, mapModifier, fleet2))
+  const fleettwolos = [1, 2, 3, 4].map(mapModifier => getFleetF33(2, mapModifier, fleet2))
 
   return {
     fleetType: 0,
