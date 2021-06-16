@@ -1,0 +1,18 @@
+{
+  "1": {
+    "api_id": 1,
+    "api_sortno": 1,
+    "api_ship_id": 1,
+    "api_lv": 99,
+    "api_slot": [1, -1, -1, -1, -1],
+    "api_sakuteki": [1, 2]
+  },
+  "2": {
+    "api_id": 2,
+    "api_sortno": 2,
+    "api_ship_id": 2,
+    "api_lv": 99,
+    "api_slot": [2, -1, -1, -1, -1],
+    "api_sakuteki": [1, 2]
+  }
+}
