@@ -38,7 +38,9 @@ export const sendData = async (path: string, data: any) => {
     }
     return response
   } catch (err) {
-    console.error(err.stack)
+    if (err instanceof Error) {
+      console.error(err.stack)
+    }
     return
   }
 }

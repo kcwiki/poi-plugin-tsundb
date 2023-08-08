@@ -8,7 +8,9 @@ export const handleResponse = (e: any) => {
     try {
       reporter.handle(e.detail.path.replace('/kcsapi/', ''), e.detail.body, e.detail.postBody)
     } catch (err) {
-      console.error(err.stack)
+      if (err instanceof Error) {
+        console.error(err.stack)
+      }
     }
   }
 }
