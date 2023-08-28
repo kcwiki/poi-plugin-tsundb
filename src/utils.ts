@@ -2,7 +2,7 @@ import { readJsonSync } from 'fs-extra'
 import fetch from 'node-fetch'
 import { resolve } from 'path'
 import _ from 'lodash'
-import { shipRemodelInfoSelector } from 'subtender/poi'
+// import { shipRemodelInfoSelector } from 'subtender/poi'
 
 const { name, version } = readJsonSync(resolve(__dirname, '../package.json'))
 
@@ -64,20 +64,51 @@ const losC2: { [_: number]: number } = {
 export const getEquipmentF33 = (master: any, equip: any): number =>
   (master.api_saku + (losC1[master.api_type[2]] || 0) * Math.sqrt(equip.api_level || 0)) * (losC2[master.api_type[2]] || 0.6)
 
-export const getShipCounts = (): { [_: number]: number } => {
-  const poiState = (window as any).getStore()
-  const { originMstIdOf } = shipRemodelInfoSelector(poiState)
+const getActualPrevId = (es: { api_id: number }[], forId: string): number | null =>
+  es.length === 1 ? es[0].api_id : (es.find(e => +(window as any).$ships[forId].api_aftershipid !== e.api_id) || {}).api_id || null
 
-  const getBaseId = (shipId: number): number => {
-    const base = originMstIdOf[shipId]
-    if (!base) {
-      console.warn(name, 'getBaseId', `can't find base id for ${shipId}`)
-      return shipId
+const getPrevIds = (): { [_: number]: number | null } =>
+  _((window as any).$ships)
+    .filter(e => +e.api_aftershipid)
+    .groupBy('api_aftershipid')
+    .mapValues((es, forId) => getActualPrevId(es, forId))
+    .value()
+
+const getBaseId = (shipId: number, prevIds: { [_: number]: number | null }, useSort: boolean = false): number => {
+  for (let i = 0, id = shipId; i < 10; ++i) {
+    const prev = prevIds[id]
+    if (!prev || (useSort && (window as any).$ships[id].api_sort_id % 10 === 1)) {
+      return id
     }
-    return base
+    id = prev
   }
+  if (useSort) {
+    console.warn(name, 'getBaseId', `can't find base id for ${shipId}`)
+  }
+  return useSort ? shipId : getBaseId(shipId, prevIds, true)
+}
 
+export const getShipCounts = (): { [_: number]: number } => {
+  const prevIds = getPrevIds()
   return _((window as any)._ships)
-    .countBy(e => getBaseId(e.api_ship_id))
+    .countBy(e => getBaseId(e.api_ship_id, prevIds))
     .value()
 }
+
+// export const getShipCounts = (): { [_: number]: number } => {
+//   const poiState = (window as any).getStore()
+//   const { originMstIdOf } = shipRemodelInfoSelector(poiState)
+
+//   const getBaseId = (shipId: number): number => {
+//     const base = originMstIdOf[shipId]
+//     if (!base) {
+//       console.warn(name, 'getBaseId', `can't find base id for ${shipId}`)
+//       return shipId
+//     }
+//     return base
+//   }
+
+//   return _((window as any)._ships)
+//     .countBy(e => getBaseId(e.api_ship_id))
+//     .value()
+// }

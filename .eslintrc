@@ -18,5 +18,6 @@
     "max-params": ["error", 10],
     "max-statements": ["error", 50],
     "no-console": 0
-  }
+  },
+  "root": true
 }

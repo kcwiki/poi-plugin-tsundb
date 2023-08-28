@@ -2,7 +2,6 @@
 
 [![Version](https://img.shields.io/npm/v/poi-plugin-tsundb.svg)](https://www.npmjs.com/package/poi-plugin-tsundb)
 [![Downloads](https://img.shields.io/npm/dm/poi-plugin-tsundb.svg)](https://www.npmjs.com/package/poi-plugin-tsundb)
-[![Dependencies](https://img.shields.io/david/dev/kcwiki/poi-plugin-tsundb.svg)](https://david-dm.org/kcwiki/poi-plugin-tsundb?type=dev)
 
 [TsunDB](https://tsundb.kc3.moe/) data submission plugin for [Poi](https://poi.io/).
 

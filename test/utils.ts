@@ -19,7 +19,7 @@ export const fromServer = (pathes: string[], n: number) =>
         }
       })
     }
-    server.listen(12345)
+    server.listen({ port: 12345 })
   })
 
 export const mockPoiWindow = () => {
