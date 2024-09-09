@@ -60,5 +60,8 @@
     "description": "Plugin.Description",
     "icon": "fa/pie-chart",
     "priority": 100
+  },
+  "dependencies": {
+    "subtender": "0.15.1"
   }
 }
