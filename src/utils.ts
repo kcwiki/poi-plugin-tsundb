@@ -64,12 +64,23 @@ const losC2: { [_: number]: number } = {
 export const getEquipmentF33 = (master: any, equip: any): number =>
   (master.api_saku + (losC1[master.api_type[2]] || 0) * Math.sqrt(equip.api_level || 0)) * (losC2[master.api_type[2]] || 0.6)
 
+// Since figuring out remodels involves traversing through non-abyssal elements in $ships,
+// it's desirable to have this value cached.
+// originMstIdOf only needs to be re-computed if window.$ships changes,
+// here we can perform a simple check on $ships' referential equality.
+let $shipsSrc: object | undefined = undefined
+let originMstIdOf: { [_: number]: number } | undefined = undefined
+
 export const getShipCounts = (): { [_: number]: number } => {
   const { $ships } = window as any
-  const { originMstIdOf } = shipRemodelInfoBuilder($ships)
+
+  if ($ships !== $shipsSrc || !originMstIdOf) {
+    $shipsSrc = $ships
+    originMstIdOf = shipRemodelInfoBuilder($ships).originMstIdOf
+  }
 
   const getBaseId = (shipId: number): number => {
-    const base = originMstIdOf[shipId]
+    const base = originMstIdOf![shipId]
     if (!base) {
       console.warn(name, 'getBaseId', `can't find base id for ${shipId}`)
       return shipId
