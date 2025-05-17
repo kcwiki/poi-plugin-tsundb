@@ -1,5 +1,5 @@
-declare module 'subtender/poi' {
-  export function shipRemodelInfoSelector(_: any): {
+declare module 'subtender/tier1' {
+  export function shipRemodelInfoBuilder(_: any): {
     originMstIdOf: { [_: number]: number }
     remodelChains: number[]
   }
