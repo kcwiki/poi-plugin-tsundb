@@ -47,8 +47,8 @@ const getInvalidEquipmentBonuses = (shipId: number, equipIds: number[]): number 
   [651, 656].includes(shipId) && equipIds.find(e => e === 315)
     ? 3
     : [65, 69, 83, 84, 93, 95, 99, 102, 105, 106, 107, 87, 91].includes((window as any).$ships[shipId].api_ctype)
-    ? 4 * equipIds.filter(e => e === 315).length
-    : 0
+      ? 4 * equipIds.filter(e => e === 315).length
+      : 0
 
 const getFleetData = (deckId: number) => {
   const isCombined = deckId === 1 && (window as any).getStore().sortie.combinedFlag
