@@ -34,7 +34,9 @@ const getShipData = (ship: any) => ({
   level: ship.api_lv,
   type: (window as any).$ships[ship.api_ship_id].api_stype,
   speed: ship.api_soku,
-  equip: ship.api_slot.slice(0, ship.api_slotnum).map((equipId: number) => ((window as any)._slotitems[equipId] || {}).api_slotitem_id || -1),
+  equip: ship.api_slot.slice(0, ship.api_slotnum).map((equipId: number) => ((window as any)._slotitems[equipId] || {}).api_slotitem_id ?? -1),
+  stars: ship.api_slot.slice(0, ship.api_slotnum).map((equipId: number) => ((window as any)._slotitems[equipId] || {}).api_level ?? -1),
+  ace: ship.api_slot.slice(0, ship.api_slotnum).map((equipId: number) => ((window as any)._slotitems[equipId] || {}).api_alv ?? -1),
   exslot: ((window as any)._slotitems[ship.api_slot_ex] || {}).api_slotitem_id || -1,
 })
 
