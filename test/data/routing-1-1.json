@@ -7,7 +7,20 @@
     "nextRoute": 1,
     "nodeInfo": { "nodeType": 4, "eventId": 4, "eventKind": 1, "nodeColor": 4, "itemGet": [], "amountofnodes": 4 },
     "fleetType": 0,
-    "fleet1": [{ "id": 1, "name": "睦月", "shiplock": 0, "level": 99, "type": 2, "equip": [1, -1, -1, -1, -1], "exslot": -1, "flee": false }],
+    "fleet1": [
+      {
+        "id": 1,
+        "name": "睦月",
+        "shiplock": 0,
+        "level": 99,
+        "type": 2,
+        "equip": [1, -1, -1, -1, -1],
+        "stars": [0, -1, -1, -1, -1],
+        "ace": [0, -1, -1, -1, -1],
+        "exslot": -1,
+        "flee": false
+      }
+    ],
     "fleet2": [],
     "fleetlevel": 99,
     "fleetids": [1],
@@ -28,7 +41,20 @@
     "nextRoute": 0,
     "nodeInfo": { "nodeType": 5, "eventId": 5, "eventKind": 1, "nodeColor": 5, "itemGet": [], "amountofnodes": 4 },
     "fleetType": 0,
-    "fleet1": [{ "id": 1, "name": "睦月", "shiplock": 0, "level": 99, "type": 2, "equip": [1, -1, -1, -1, -1], "exslot": -1, "flee": false }],
+    "fleet1": [
+      {
+        "id": 1,
+        "name": "睦月",
+        "shiplock": 0,
+        "level": 99,
+        "type": 2,
+        "equip": [1, -1, -1, -1, -1],
+        "stars": [0, -1, -1, -1, -1],
+        "ace": [0, -1, -1, -1, -1],
+        "exslot": -1,
+        "flee": false
+      }
+    ],
     "fleet2": [],
     "fleetlevel": 99,
     "fleetids": [1],
