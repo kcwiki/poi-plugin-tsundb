@@ -215,7 +215,7 @@ const sendDrop = (map: string, node: number, difficulty: number, cleared: boolea
   // Don't send if slots are full
   if (
     (Object.keys((window as any)._ships).length >= (window as any).getStore().info.basic.api_max_chara ||
-      Object.keys((window as any)._ships).length >= (window as any).getStore().info.basic.api_max_slotitem - 3) &&
+      Object.keys((window as any)._slotitems).length >= (window as any).getStore().info.basic.api_max_slotitem - 3) &&
     !body.api_get_ship
   ) {
     return
